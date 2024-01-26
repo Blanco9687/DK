@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Donkey Kong</title>
+  <style>
+    canvas {
+      border: 2px solid black;
+      display: block;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="donkeyKongCanvas" width="400" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById('donkeyKongCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const player = {
+      x: 50,
+      y: 300,
+      width: 30,
+      height: 30,
+    };
+
+    const obstacle = {
+      x: 200,
+      y: 250,
+      width: 50,
+      height: 50,
+    };
+
+    function drawPlayer() {
+      ctx.fillStyle = 'red';
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+    function drawObstacle() {
+      ctx.fillStyle = 'brown';
+      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    }
+
+    function checkCollision() {
+      if (
+        player.x < obstacle.x + obstacle.width &&
+        player.x + player.width > obstacle.x &&
+        player.y < obstacle.y + obstacle.height &&
+        player.y + player.height > obstacle.y
+      ) {
+        alert('Game Over! You collided with the obstacle.');
+        resetGame();
+      }
+    }
+
+    function resetGame() {
+      player.x = 50;
+      player.y = 300;
+      obstacle.x = 200;
+      obstacle.y = 250;
+    }
+
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawPlayer();
+      drawObstacle();
+      checkCollision();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' && player.x < canvas.width - player.width) {
+        player.x += 5;
+      } else if (event.key === 'ArrowLeft' && player.x > 0) {
+        player.x -= 5;
+      }
+    });
+
+    gameLoop();
+  </script>
+</body>
+</html>
